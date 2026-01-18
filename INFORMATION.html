@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFORMATION WARGA X / III</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Efek liquid glass */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.04) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #ffffff, #d4d4d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background: linear-gradient(to right, transparent, #ffffff, transparent);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+        
+        /* Section untuk informasi warga */
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin: 50px 0 30px;
+            color: #ffffff;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 1px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, transparent, #ffffff, transparent);
+        }
+        
+        /* Kartu informasi warga */
+        .residents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .resident-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resident-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+            z-index: 0;
+        }
+        
+        .resident-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .resident-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .resident-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .member {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .admin {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+        
+        .commander {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9C27B0;
+            border: 1px solid rgba(156, 39, 176, 0.3);
+        }
+        
+        .resident-info {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+        
+        .info-item i {
+            width: 25px;
+            margin-right: 10px;
+            color: #cccccc;
+            font-size: 1.1rem;
+        }
+        
+        .character {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-style: italic;
+            color: #dddddd;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Section untuk nilai-nilai */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .value-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px 25px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            height: 80px;
+            width: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .value-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        .value-desc {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        /* Kotak khusus untuk arti X/III */
+        .meaning-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin: 40px auto 60px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .meaning-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .roman-numeral {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: #ffffff;
+            margin: 0 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .separator {
+            font-size: 2.5rem;
+            color: #cccccc;
+        }
+        
+        .meaning-content {
+            text-align: center;
+            color: #dddddd;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        
+        .meaning-content p {
+            margin-bottom: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .copyright {
+            margin-top: 10px;
+            color: #777777;
+        }
+        
+        /* Responsif */
+        @media (max-width: 1100px) {
+            .residents-grid {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .resident-card {
+                padding: 20px;
+            }
+            
+            .resident-name {
+                font-size: 1.5rem;
+            }
+            
+            .roman-numeral {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .resident-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .status-badge {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">INFORMATION WARGA X / III</h1>
+            <p class="subtitle">Directory of Residents & Core Values</p>
+        </header>
+        
+        <section class="residents-section">
+            <h2 class="section-title">Informasi Warga</h2>
+            
+            <div class="residents-grid">
+                <!-- Kartu warga 1 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Iza</h3>
+                        <span class="status-badge member">Members</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Iza</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+62 852-1216-1261</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Members</span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Always be active in conversations/activities when gathering or chatting in a group.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 2 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Misel</h3>
+                        <span class="status-badge admin">Group Admin</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Misel</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+62 878-5035-9822</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Group Admin</span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Friendly even though sometimes his mouth often talks or speaks dirty.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 3 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Krishna</h3>
+                        <span class="status-badge member">Members</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Krishna</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+62 819-9902-3330</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Members</span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Always joins in when there are gatherings, both morning and evening, he is a friendly person.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 4 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Deo</h3>
+                        <span class="status-badge commander">Commander of the Group</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Deo</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span>+62 821-4315-4835</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Commander of the Group</span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        He is friendly, kind, polite, smart, always participates in activities when we gather together in the morning or evening.
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="values-section">
+            <h2 class="section-title">Nilai-Nilai Warga X / III</h2>
+            
+            <div class="values-grid">
+                <!-- Kotak nilai 1 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-hands"></i>
+                    </div>
+                    <h3 class="value-title">MEMILIKI TATAKRAMA YANG BAGUS, SOPAN</h3>
+                    <p class="value-desc">Menjunjung tinggi nilai-nilai kesopanan dan tata krama dalam setiap interaksi dan kegiatan bersama.</p>
+                </div>
+                
+                <!-- Kotak nilai 2 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="value-title">AKAL CERDAS</h3>
+                    <p class="value-desc">Mengutamakan kecerdasan dalam berpikir dan bertindak untuk kebaikan bersama.</p>
+                </div>
+                
+                <!-- Kotak nilai 3 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="value-title">KREATIF</h3>
+                    <p class="value-desc">Selalu mencari cara baru dan inovatif dalam menyelesaikan masalah dan menciptakan hal-hal positif.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="meaning-section">
+            <div class="meaning-card">
+                <div class="meaning-header">
+                    <div class="roman-numeral">X</div>
+                    <div class="separator">/</div>
+                    <div class="roman-numeral">III</div>
+                </div>
+                
+                <div class="meaning-content">
+                    <p><strong>X</strong> : Dalam angka Romawi, X artinya adalah 10</p>
+                    <p><strong>III</strong> : Dalam angka Romawi juga, III artinya 3</p>
+                    <p>Panglima Grup ini mengartikan bahwa <strong>X / III</strong> adalah</p>
+                    <p style="font-size: 1.5rem; margin-top: 15px; color: #ffffff; font-family: 'Cinzel', serif;">
+                        RT 10 / RW 3
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>INFORMATION WARGA X / III</p>
+            <p class="copyright">© By : Deshbanaaa | 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Efek interaktif sederhana untuk kartu saat dihover
+        document.addEventListener('DOMContentLoaded', function() {
+            const residentCards = document.querySelectorAll('.resident-card');
+            const valueCards = document.querySelectorAll('.value-card');
+            
+            // Tambahkan efek hover yang lebih halus
+            residentCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            valueCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Efek teks judul yang berkilau
+            const title = document.querySelector('.title');
+            let hue = 0;
+            
+            function updateTitleColor() {
+                hue = (hue + 0.5) % 360;
+                title.style.background = `linear-gradient(to right, hsl(${hue}, 100%, 85%), hsl(${(hue + 30) % 360}, 100%, 85%))`;
+                title.style.webkitBackgroundClip = 'text';
+                title.style.backgroundClip = 'text';
+                requestAnimationFrame(updateTitleColor);
+            }
+            
+            // Mulai animasi warna judul
+            updateTitleColor();
+        });
+    </script>
+</body>
+</html>
+```
